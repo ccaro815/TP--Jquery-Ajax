@@ -26,6 +26,15 @@ def get_tasks():
 
 @app.route('/update-task/<int:task_id>', methods=['PUT'])
 def update_task(task_id):
+    updated_task_text = request.json.get('task')
+    for task in tasks:
+        if task['id'] == task_id:
+            task['task'] = updated_task_text
+            return jsonify(task), 200
+    return jsonify({'error': 'Task not found'}), 404
+
+@app.route('/toggle-complete-task/<int:task_id>', methods=['PUT'])
+def toggle_complete_task(task_id):
     for task in tasks:
         if task['id'] == task_id:
             task['completed'] = not task['completed']
